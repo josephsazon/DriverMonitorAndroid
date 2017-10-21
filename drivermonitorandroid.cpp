@@ -1,6 +1,9 @@
 #include "drivermonitorandroid.h"
 #include "ui_drivermonitorandroid.h"
 
+QVector<double> speedPlotData;
+QVector<double> xPlotData;
+
 DriverMonitorAndroid::DriverMonitorAndroid(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::DriverMonitorAndroid)
@@ -19,6 +22,13 @@ DriverMonitorAndroid::DriverMonitorAndroid(QWidget *parent) :
 
     alertSound = new QMediaPlayer(this);
     alertSound->setMedia(QUrl("qrc:/res/alarm.mp3"));
+
+    ui->speedPlot->addGraph();
+    ui->speedPlot->yAxis->setRange(0, 130);
+    ui->speedPlot->setInteractions(QCP::iSelectItems | QCP::iRangeDrag);
+    ui->speedPlot->axisRect()->setRangeDrag(Qt::Horizontal);
+    ui->speedPlot->graph(0)->setLineStyle(QCPGraph::lsLine);
+    ui->speedPlot->graph(0)->setPen(QPen(Qt::blue));
 }
 
 DriverMonitorAndroid::~DriverMonitorAndroid()
@@ -50,6 +60,13 @@ void DriverMonitorAndroid::positionUpdated(QGeoPositionInfo m_geoPositionInfo)
     {
         this->speed = m_geoPositionInfo.attribute(QGeoPositionInfo::GroundSpeed) * 3.6;
         ui->speed_lcdNumber->display(speed);
+        speedPlotData.append(speed);
+        xPlotData.append(speedPlotData.size());
+
+        ui->speedPlot->graph(0)->setData(xPlotData, speedPlotData);
+        ui->speedPlot->xAxis->setRange(speedPlotData.size(), 100, Qt::AlignRight);
+        ui->speedPlot->replot();
+        ui->speedPlot->update();
     }
 }
 
@@ -75,6 +92,10 @@ void DriverMonitorAndroid::messageToCommand(const QString &message)
 void DriverMonitorAndroid::on_OpenCamera_pushButton_clicked()
 {
     emit passToChat("Open Camera");
+    if(alertSound->state() == QMediaPlayer::PlayingState)
+        alertSound->setPosition(0);
+    else
+        alertSound->play();
 }
 
 void DriverMonitorAndroid::on_CloseCamera_pushButton_clicked()

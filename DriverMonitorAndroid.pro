@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui positioning location bluetooth widgets multimedia
+QT       += core gui positioning location bluetooth widgets multimedia printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -29,14 +29,16 @@ SOURCES += \
     chat.cpp \
     chatclient.cpp \
     chatserver.cpp \
-    remoteselector.cpp
+    remoteselector.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
         drivermonitorandroid.h \
     chat.h \
     chatclient.h \
     chatserver.h \
-    remoteselector.h
+    remoteselector.h \
+    qcustomplot.h
 
 FORMS += \
         drivermonitorandroid.ui \
