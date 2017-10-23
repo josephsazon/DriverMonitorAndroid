@@ -5,6 +5,7 @@
 #include <QMediaPlayer>
 #include <QGeoPositionInfo>
 #include <QGeoPositionInfoSource>
+#include <QTime>
 
 #include <chat.h>
 
@@ -29,11 +30,16 @@ public slots:
     void positionUpdated(QGeoPositionInfo m_geoPositionInfo);
     void requestUpdate();
     void messageToCommand(const QString &message);
+    void clientStatus(const bool &status);
 
 private slots:
     void on_OpenCamera_pushButton_clicked();
 
     void on_CloseCamera_pushButton_clicked();
+
+    void on_ThresholdSpeed_horizontalSlider_valueChanged(int value);
+
+    void on_ThresholdSpeedBypass_checkBox_toggled(bool checked);
 
 private:
     Ui::DriverMonitorAndroid *ui;
@@ -47,6 +53,10 @@ private:
     Chat *chat;
 
     QMediaPlayer *alertSound;
+
+    bool client;
+
+    QTime time;
 };
 
 #endif // DRIVERMONITORANDROID_H

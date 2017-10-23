@@ -19,6 +19,7 @@ DriverMonitorAndroid::DriverMonitorAndroid(QWidget *parent) :
 
     connect(this, SIGNAL(passToChat(QString)), chat, SLOT(sendClicked(QString)));
     connect(chat, SIGNAL(passToApp(QString)), this, SLOT(messageToCommand(QString)));
+    connect(chat, SIGNAL(clientActive(bool)), this, SLOT(clientStatus(bool)));
 
     alertSound = new QMediaPlayer(this);
     alertSound->setMedia(QUrl("qrc:/res/alarm.mp3"));
@@ -67,6 +68,14 @@ void DriverMonitorAndroid::positionUpdated(QGeoPositionInfo m_geoPositionInfo)
         ui->speedPlot->xAxis->setRange(speedPlotData.size(), 100, Qt::AlignRight);
         ui->speedPlot->replot();
         ui->speedPlot->update();
+
+        if(client == true)
+        {
+            if(speed >= ui->ThresholdSpeed_horizontalSlider->value() || ui->ThresholdSpeedBypass_checkBox->isChecked())
+                emit passToChat("Enable Distracted");
+            else
+                emit passToChat("Disable Distracted");
+        }
     }
 }
 
@@ -77,9 +86,11 @@ void DriverMonitorAndroid::requestUpdate()
 
 void DriverMonitorAndroid::messageToCommand(const QString &message)
 {
-    commandString += message + '\n';
+    qDebug() << message;
+    time = QTime::currentTime();
+    commandString += time.toString("hh:mm:ss ap") + ':' + message + '\n';
     ui->commandText->setText(commandString);
-    if(message == "Alarm\n")
+    if(message == "Alarm")
     {
         //Sound Alarm
         if(alertSound->state() == QMediaPlayer::PlayingState)
@@ -92,10 +103,6 @@ void DriverMonitorAndroid::messageToCommand(const QString &message)
 void DriverMonitorAndroid::on_OpenCamera_pushButton_clicked()
 {
     emit passToChat("Open Camera");
-    if(alertSound->state() == QMediaPlayer::PlayingState)
-        alertSound->setPosition(0);
-    else
-        alertSound->play();
 }
 
 void DriverMonitorAndroid::on_CloseCamera_pushButton_clicked()
@@ -103,3 +110,24 @@ void DriverMonitorAndroid::on_CloseCamera_pushButton_clicked()
     emit passToChat("Close Camera");
 }
 
+
+void DriverMonitorAndroid::on_ThresholdSpeed_horizontalSlider_valueChanged(int value)
+{
+    ui->ThresholdSpeedLabel->setText(QString::number(value));
+}
+
+void DriverMonitorAndroid::clientStatus(const bool &status)
+{
+    if(status == true)
+        client = true;
+    else
+        client = false;
+}
+
+void DriverMonitorAndroid::on_ThresholdSpeedBypass_checkBox_toggled(bool checked)
+{
+    if(checked == true)
+        emit passToChat("Enable Distracted");
+    else
+        emit passToChat("Disable Distracted");
+}

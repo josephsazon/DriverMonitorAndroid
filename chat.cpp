@@ -107,11 +107,13 @@ Chat::~Chat()
 void Chat::clientConnected(const QString &name)
 {
     ui->chat->insertPlainText(QString::fromLatin1("%1 has joined chat.\n").arg(name));
+    emit clientActive(true);
 }
 
 void Chat::clientDisconnected(const QString &name)
 {
     ui->chat->insertPlainText(QString::fromLatin1("%1 has left.\n").arg(name));
+    emit clientActive(false);
 }
 //! [clientConnected clientDisconnected]
 

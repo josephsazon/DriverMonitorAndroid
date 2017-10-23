@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>729</height>
+    <height>863</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -74,17 +74,48 @@
      </widget>
     </item>
     <item>
-     <spacer name="verticalSpacer_2">
+     <widget class="QCheckBox" name="ThresholdSpeedBypass_checkBox">
+      <property name="text">
+       <string>Bypass Distracted Threshold Speed</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Distracted Threshold Speed:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="ThresholdSpeedLabel">
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="text">
+         <string>30</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QSlider" name="ThresholdSpeed_horizontalSlider">
+      <property name="maximum">
+       <number>130</number>
+      </property>
+      <property name="sliderPosition">
+       <number>30</number>
+      </property>
       <property name="orientation">
-       <enum>Qt::Vertical</enum>
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
+     </widget>
     </item>
     <item>
      <widget class="QTextBrowser" name="commandText">

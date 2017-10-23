@@ -65,6 +65,7 @@ public:
 signals:
     void sendMessage(const QString &message);
     void passToApp(const QString &message);
+    void clientActive(const bool &status);
 
 private slots:
     void connectClicked();
