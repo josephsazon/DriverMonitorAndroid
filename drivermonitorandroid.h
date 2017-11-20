@@ -6,6 +6,10 @@
 #include <QGeoPositionInfo>
 #include <QGeoPositionInfoSource>
 #include <QTime>
+#include <QFileDialog>
+#include <QStandardPaths>
+#include <QDir>
+#include <QFileInfo>
 
 #include <chat.h>
 
@@ -22,6 +26,8 @@ public:
     ~DriverMonitorAndroid();
 
     void startGPS();
+    void readEntry(const QString &message);
+    void displayEntry(const QString &time, const QString &instance, const QString &duration);
 
 signals:
     void passToChat(const QString &message);
@@ -30,7 +36,7 @@ public slots:
     void positionUpdated(QGeoPositionInfo m_geoPositionInfo);
     void requestUpdate();
     void messageToCommand(const QString &message);
-    void clientStatus(const bool &status);
+    void clientStatus(const bool &status);    
 
 private slots:
     void on_OpenCamera_pushButton_clicked();
@@ -40,6 +46,8 @@ private slots:
     void on_ThresholdSpeed_horizontalSlider_valueChanged(int value);
 
     void on_ThresholdSpeedBypass_checkBox_toggled(bool checked);
+
+    //void on_changeAlarmButton_clicked();
 
 private:
     Ui::DriverMonitorAndroid *ui;
@@ -52,7 +60,8 @@ private:
     QString commandString;
     Chat *chat;
 
-    QMediaPlayer *alertSound;
+    QMediaPlayer *alertSound1;
+    QMediaPlayer *alertSound2;
 
     bool client;
 
